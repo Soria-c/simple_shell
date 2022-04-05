@@ -1,6 +1,11 @@
 #include "main.h"
-extern char **environ; /*cambiar por env*/
 
+/**
+ * str_cat - implementation of strcat() from <string.h>.
+ * @dest: target string.
+ * @src: source string.
+ * Return: address modified target string.
+ */
 char *str_cat(char *dest, char *src)
 {
 	int j, i;
@@ -11,6 +16,13 @@ char *str_cat(char *dest, char *src)
 	*(dest + (j + i)) = '\0';
 	return (dest);
 }
+
+/**
+ * str_cpy - implementation of strcpy() from <string.h>.
+ * @dest: target array to store src.
+ * @src: source string.
+ * Return: address of copied string.
+ */
 char *str_cpy(char *dest, char *src)
 {
 	int i, j;
@@ -21,6 +33,12 @@ char *str_cpy(char *dest, char *src)
 	*(dest + j) = '\0';
 	return (dest);
 }
+
+/**
+ * str_len - implementation of strlen() from <string.h>.
+ * @s: source string.
+ * Return: lenght of s.
+ */
 int str_len(char *s)
 {
 	int i;
@@ -29,6 +47,12 @@ int str_len(char *s)
 		continue;
 	return (i);
 }
+
+/**
+ * _getenv - implementation of getenv() from <stdlib.h>.
+ * @name: name of the environment variable.
+ * Return: address of the variable, NULL if not found.
+ */
 char *_getenv(char *name)
 {
 	unsigned int i;
@@ -41,35 +65,47 @@ char *_getenv(char *name)
 	return (NULL);
 }
 
+/**
+ * _which - simple implementation of the which shell command.
+ * @cmd: command.
+ * Return: directory in the path, NULL if not found or malloc fails.
+ */
 char *_which(char *cmd)
 {
-	char *s, **path, *tk, *cat;
-	char *ar;
+	char s[1024], **path, *tk, *cat, *ar;
 	int i, j;
 	struct stat st;
 
 	if (!cmd)
 		return (NULL);
 	path = malloc(sizeof(char) * 1024);
+	if (!path)
+		return (NULL);
 	ar = malloc(str_len(cmd) + 2);
 	ar[0] = '/';
 	ar[1] = '\0';
 	ar = str_cat(ar, cmd);
-	s = _getenv("PATH");
-	tk = str_tok(s, ":");
+	str_cpy(s, _getenv("PATH"));
+	tk = str_tok(s, ":=");
 	for (i = 0; tk; i++, tk = str_tok(NULL, ":"))
 		path[i] = tk;
 	path[i] = NULL;
-	for (j = 0;path[j];j++)
+	for (j = 0; path[j]; j++)
 	{
 		cat = malloc(str_len(path[j]) + str_len(ar) + 1);
+		if (!cat)
+		{
+			free(ar);
+			free(path);
+			return (NULL);
+		}
 		cat = str_cpy(cat, path[j]);
 		cat = str_cat(cat, ar);
 		if (stat(cat, &st) == 0)
 		{
 			free(ar);
 			free(path);
-			return(cat);
+			return (cat);
 		}
 		free(cat);
 	}
