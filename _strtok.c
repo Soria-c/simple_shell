@@ -1,5 +1,10 @@
 #include "main.h"
-
+/**
+ * checkex2 - checks if a char is found in a set.
+ * @s: set.
+ * @s2: char.
+ * Return: 1 if s2 is included in s, 0 otherwise.
+ */
 int checkex2(char *s, char s2)
 {
 	int i;
@@ -11,46 +16,66 @@ int checkex2(char *s, char s2)
 	}
 	return (0);
 }
+
+/**
+ * iteration - evaluates the source string to tokenize it later.
+ * @delim2: address to store the new delimiter.
+ * @delim: previous delimiter.
+ * @str: source string.
+ * @i: counter.
+ * @j: counter.
+ * @k: counter.
+ * Return: address of new delimiter, NULL if malloc fails.
+ */
+char *iteration(char **delim2, char *delim, char *str, int *i, int *j, int *k)
+{
+	*delim2 = delimf(delim);
+	if (!(*delim2))
+		return (NULL);
+	for (; checkex2(*delim2, str[*j]) && str[*j]; *j = *j + 1)
+		;
+	*k = *j;
+	for (; !(checkex2(*delim2, str[*j])) && str[*j]; *j = *j + 1)
+		;
+	for (; checkex2(*delim2, str[*j + *i]) && str[*j + *i]; *i = *i + 1)
+		;
+	return (*delim2);
+}
+
+/**
+ * str_tok - implementation of strtok() fron <string.h>.
+ * @str: source string.
+ * @delim: delimiter.
+ * Return: address of new token, NULL if no more tokens are found/malloc fails.
+ */
 char *str_tok(char *str, char *delim)
 {
-	unsigned int i, j = 0, k, f = 0;
-	char *s, *delim2;
+	int i = 0, j = 0, k = 0, f = 0;
+	char *s, *delim2, *mllc;
 	static char *save;
 
 	if (str)
 	{
-		delim2 = delimf(delim);
-		for (; checkex2(delim2, str[j]) && str[j]; j++)
-			continue;
-		k = j;
-		for (; !(checkex2(delim2, str[j]) && str[j]); j++)
-			continue;
+		mllc = iteration(&delim2, delim, str, &i, &j, &k);
+		if (!mllc)
+			return (NULL);
+		if (!str[i + j] || !str[j])
+			save = NULL;
+		else
+			save = &str[j + 1];
 		str[j] = '\0';
-		save = &str[j + 1];
 		s = &str[k];
 	}
 	else if (!str)
 	{
 		if (!save)
 			return (NULL);
-		delim2 = delimf(delim);
-		for (; checkex2(delim2, save[j]) && save[j]; j++)
-			continue;
-		k = j;
-		for (; !(checkex2(delim2, save[j])) && save[j]; j++)
-			continue;
-		if (!save[j])
+		mllc = iteration(&delim2, delim, save, &i, &j, &k);
+		if (!mllc)
+			return (NULL);
+		if (!save[j] || !save[j + i])
 			f = 1;
-		else if (checkex2(delim2, save[j]) && save[j])
-		{
-			for (i = 1; checkex2(delim2, save[j + i]) && save[j + i]; i++)
-				;
-			if (!save[j + i])
-				f = 1;
-			save[j] = '\0';
-		}
-		else
-			save[j] = '\0';
+		save[j] = '\0';
 		s = &save[k];
 		if (f)
 			save = NULL;
@@ -61,6 +86,13 @@ char *str_tok(char *str, char *delim)
 	return (s);
 }
 
+/**
+ * checkex - checks if a char is found in s for n bytes of s.
+ * @s: source delimiter.
+ * @s2: char.
+ * @n: number of bytes to compare.
+ * Return: 1 if s2 is include in s2, 0 otherwise.
+ */
 int checkex(char *s, char s2, int n)
 {
 	int i;
@@ -72,6 +104,12 @@ int checkex(char *s, char s2, int n)
 	}
 	return (0);
 }
+
+/**
+ * delimf - creates a new delimiter without repeated chars.
+ * @delim: source delimiter.
+ * Return: address of new delimiter, NULL if malloc fails.
+ */
 char *delimf(char *delim)
 {
 	int i,  j = 1;
@@ -79,10 +117,10 @@ char *delimf(char *delim)
 	char *new;
 
 	new = malloc(sizeof(char) * 32);
-
+	if (!new)
+		return (NULL);
 	new[0] = delim[0];
 	new[1] = '\0';
-
 	for (i = 1; delim[i]; i++)
 	{
 		if ((delim[i] != s) && !(checkex(delim, delim[i], i)))
@@ -94,12 +132,4 @@ char *delimf(char *delim)
 		}
 	}
 	return (new);
-}
-int strn_cmp(char *s1, char *s2, int n)
-{
-	int i;
-
-	for (i = 0; (!(s1[i] - s2[i]) && (s1[i])) && (i < n); i++)
-		continue;
-	return (n - i);
 }
