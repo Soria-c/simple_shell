@@ -1,8 +1,5 @@
-#include <stdlib.h>
-#include <stdio.h>
+#include "main.h"
 
-int checkex(char *s, char s2, int n);
-char *delimf(char *delim);
 int checkex2(char *s, char s2)
 {
 	int i;
@@ -97,4 +94,12 @@ char *delimf(char *delim)
 		}
 	}
 	return (new);
+}
+int strn_cmp(char *s1, char *s2, int n)
+{
+	int i;
+
+	for (i = 0; (!(s1[i] - s2[i]) && (s1[i])) && (i < n); i++)
+		continue;
+	return (n - i);
 }
