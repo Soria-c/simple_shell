@@ -5,51 +5,47 @@
 #include <sys/wait.h>
 #include <signal.h>
 
-int main(int argc, char **argv, char **env)
+/**
+ * main - entry point, takes input from user.
+ * @argc: number of arguments.
+ * @argv: array of arguments.
+ * Return: 0
+ */
+int main(int argc __attribute__((unused)), char **argv)
 {
-	char *lin = NULL, *wcmd;
+	char *lin = NULL, *wcmd, *tk, *cmd[32];
 	size_t n = 0;
 	ssize_t r;
-	char *cmd[2];
-	int id, status, rexc;
+	int id, status, i, s;
+	struct stat st;
 
-
-	cmd[1] = NULL;
 	write(1, "customShell $: ", 15);
-	for (;(r = getline(&lin, &n, stdin)) != -1; write(1, "customShell $: ", 15))
+	for (; (r = getline(&lin, &n, stdin)) != -1; write(1, "customShell $: ", 15))
 	{
 		if (lin[r - 1] == '\n')
 			lin[r - 1] = '\0';
-		cmd[0] = lin;
-		id = fork();
+		tk = str_tok(lin, " ");
+		for (i = 0; tk; tk = str_tok(NULL, " "), i++)
+			cmd[i] = tk;
+		cmd[i] = NULL;
+		if (!(*cmd[0]))
+			continue;
+		s = stat(cmd[0], &st);
+		if (s)
+			wcmd = _which(cmd[0]);
+		if ((!s) || (s && wcmd))
+			id = _fork(s, wcmd);
+		else
+		{
+			free(wcmd);
+			printf_error(cmd[0], argv[0]);
+			continue;
+		}
 		if (!id)
-		{
-			rexc = execve(lin, cmd, NULL);
-			if (rexc == -1)
-			{
-				wcmd = _which(lin);
-				if (!wcmd || !(*cmd[0]))
-				{
-					printf("File not found\n");
-					free(lin);
-					free(wcmd);
-					/*kill(getpid(), SIGKILL);*/
-					_exit(1);
-				}
-				else
-				{
-					cmd[0] = str_cpy(cmd[0], wcmd);
-					execve(wcmd, cmd, NULL);
-				}
-			}
-		}
+			_execve(cmd);
 		else if (id > 0)
-		{
 			wait(&status);
-			/*kill(getpid(), SIGKILL);*/
-		}
 	}
 	free(lin);
 	return (0);
-
 }
