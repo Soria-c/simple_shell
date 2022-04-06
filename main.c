@@ -16,19 +16,21 @@ int main(int argc __attribute__((unused)), char **argv)
 	char *lin = NULL, *wcmd, *tk, *cmd[32];
 	size_t n = 0;
 	ssize_t r;
-	int id, status, i, s;
+	int id, status, i, s, c = 0, b;
 	struct stat st;
 
-	write(1, "customShell $: ", 15);
-	for (; (r = getline(&lin, &n, stdin)) != -1; write(1, "customShell $: ", 15))
+	_printf("Kali $: ");
+	for (; (r = getline(&lin, &n, stdin)) != -1; _printf("Kali $: "))
 	{
+		c++;
 		if (lin[r - 1] == '\n')
 			lin[r - 1] = '\0';
 		tk = str_tok(lin, " ");
 		for (i = 0; tk; tk = str_tok(NULL, " "), i++)
 			cmd[i] = tk;
 		cmd[i] = NULL;
-		if (!(*cmd[0]))
+		b = builtin_check(cmd, lin);
+		if (!(*cmd[0]) || !b)
 			continue;
 		s = stat(cmd[0], &st);
 		if (s)
@@ -38,7 +40,7 @@ int main(int argc __attribute__((unused)), char **argv)
 		else
 		{
 			free(wcmd);
-			printf_error(cmd[0], argv[0]);
+			printf_error(cmd[0], argv[0], c);
 			continue;
 		}
 		if (!id)
