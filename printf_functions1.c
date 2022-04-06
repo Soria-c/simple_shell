@@ -165,14 +165,14 @@ int fs(const char *format, char *fs, char *s, int sz, va_list a, int z, int w)
 		case 'd':
 		case 'i':
 			to_string(str2, va_arg(a, int));
-			r = ps(format, fs, str2, sz, a, op, z, w);
+			r = p(format, fs, str2, sz, a, op, z, w);
 			break;
 		case '%':
 			r = pc(format, fs, chr, sz, a, op, z, w);
 			break;
 		case 's':
 			str = va_arg(a, char *);
-			r = ps(format, fs, str, sz, a, op, z, w);
+			r = p(format, fs, str, sz, a, op, z, w);
 			break;
 		default:
 			r = pv(format, fs, sz, a, op, z, w);
