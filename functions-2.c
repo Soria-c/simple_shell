@@ -49,12 +49,29 @@ void _execve(char **cmd)
  * printf_error - prints error
  * @cmd: command.
  * @argv: name of the program
+ * @c: number of times the prompt has been printed.
  */
-void printf_error(char *cmd, char *argv)
+void printf_error(char *cmd, char *argv, int c)
 {
-	write(STDOUT_FILENO, argv, str_len(argv));
-	write(STDOUT_FILENO, ": ", 2);
-	write(STDOUT_FILENO, cmd, str_len(cmd));
-	write(STDOUT_FILENO, ": ", 2);
-	write(STDOUT_FILENO, "command not found\n", 18);
+	_printf("%s: %d: %s: not found\n", argv, c, cmd);
+}
+/**
+ * builtin_check - checks for built in functions.
+ * @cmd: commands.
+ * @lin: full user input string, to be freed is needed.
+ * Return: 0 if a built in is found, 1 otherwise
+ */
+int builtin_check(char **cmd, char *lin)
+{
+	if (!strn_cmp(cmd[0], "exit", 4))
+	{
+		free(lin);
+		exit(1);
+	}
+	if (!strn_cmp(cmd[0], "env", 3))
+	{
+		printenv();
+		return (0);
+	}
+	return (1);
 }
