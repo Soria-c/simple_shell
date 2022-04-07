@@ -26,7 +26,7 @@ extern char **environ;
 
 int _setenv(char **cmd, char *argv, int *stnvf);
 void check_env(int *stnvf);
-int _unsetenv(char **cmd, char *argv);
+int _unsetenv(char **cmd, char *argv, int *stnvf);
 int array2d_len(char **a);
 int str_cmp(char *s1, char *s2);
 int ex_it(char **cmd, char *argv, int *stnvf);
