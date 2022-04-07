@@ -72,7 +72,9 @@ int builtin_check(char **cmd, b_i *builtins, char *argv, int *stnvf)
 	{
 		if (!(str_cmp(cmd[0], builtins[i].name)))
 		{
-			if (!str_cmp(cmd[0], "exit") || !str_cmp(cmd[0], "setenv"))
+			if (!str_cmp(cmd[0], "exit") ||
+				!str_cmp(cmd[0], "setenv") ||
+				!str_cmp(cmd[0], "unsetenv"))
 				r = builtins[i].func_ex(cmd, argv, stnvf);
 			else
 				r = builtins[i].func_ptr(cmd, argv);
