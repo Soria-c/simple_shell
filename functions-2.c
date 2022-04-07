@@ -55,23 +55,28 @@ void printf_error(char *cmd, char *argv, int c)
 {
 	_printf("%s: %d: %s: not found\n", argv, c, cmd);
 }
+
 /**
  * builtin_check - checks for built in functions.
  * @cmd: commands.
- * @lin: full user input string, to be freed is needed.
+ * @builtins: array of built in structs.
+ * @argv: current name of the program.
+ * @stnvf: number of new values allocated in environ.
  * Return: 0 if a built in is found, 1 otherwise
  */
-int builtin_check(char **cmd, char *lin)
+int builtin_check(char **cmd, b_i *builtins, char *argv, int *stnvf)
 {
-	if (!strn_cmp(cmd[0], "exit", 4))
+	int r = 1, i;
+
+	for (i = 0; builtins[i].name; i++)
 	{
-		free(lin);
-		exit(1);
+		if (!(str_cmp(cmd[0], builtins[i].name)))
+		{
+			if (!str_cmp(cmd[0], "exit") || !str_cmp(cmd[0], "setenv"))
+				r = builtins[i].func_ex(cmd, argv, stnvf);
+			else
+				r = builtins[i].func_ptr(cmd, argv);
+			}
 	}
-	if (!strn_cmp(cmd[0], "env", 3))
-	{
-		printenv();
-		return (0);
-	}
-	return (1);
+	return (r);
 }
