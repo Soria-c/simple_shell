@@ -18,7 +18,7 @@ int main(int argc __attribute__((unused)), char **argv)
 	int id, status, i, s, c = 0, b, stnvf = 0;
 	struct stat st;
 	b_i builtins[] = {{"exit", NULL, ex_it}, {"env", printenv, NULL},
-	{"setenv", NULL, _setenv}, {"unsetenv", _unsetenv, NULL}, {NULL, NULL, NULL}};
+	{"setenv", NULL, _setenv}, {"unsetenv", NULL, _unsetenv}, {NULL, NULL, NULL}};
 
 	_printf("Kali $: ");
 	for (; (r = getline(&lin, &n, stdin)) != -1; _printf("Kali $: "))
