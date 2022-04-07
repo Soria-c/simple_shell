@@ -51,7 +51,7 @@ char *iteration(char **delim2, char *delim, char *str, int *i, int *j, int *k)
 char *str_tok(char *str, char *delim)
 {
 	int i = 0, j = 0, k = 0, f = 0;
-	char *s, *delim2, *mllc;
+	char *s = NULL, *delim2 = NULL, *mllc;
 	static char *save;
 
 	if (str)
