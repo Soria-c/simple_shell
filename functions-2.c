@@ -76,7 +76,7 @@ int builtin_check(char **cmd, b_i *builtins, char *argv, int *stnvf)
 				r = builtins[i].func_ex(cmd, argv, stnvf);
 			else
 				r = builtins[i].func_ptr(cmd, argv);
-			}
+		}
 	}
 	return (r);
 }
