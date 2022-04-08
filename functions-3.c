@@ -57,7 +57,7 @@ void check_env(int *stnvf)
 	if (*stnvf)
 	{
 		for (i = array2d_len(environ) - *stnvf; environ[i]; i++)
-		free(environ[i]);
+			free(environ[i]);
 	}
 }
 
