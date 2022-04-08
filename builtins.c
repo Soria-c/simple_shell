@@ -42,7 +42,7 @@ int ex_it(char **cmd, char *argv, int *stnvf)
 		}
 		else
 		{
-			if (isnt_digit(cmd[1]))
+			if (isnt_digit(cmd[1]) && cmd[1][0] != '-')
 			{
 				_printf("exit\n%s: exit: %s:", argv, cmd[1]);
 				_printf(" numeric argument required\n");
@@ -50,7 +50,7 @@ int ex_it(char **cmd, char *argv, int *stnvf)
 				free(cmd[0]);
 				exit(2);
 			}
-			e = _atoi(cmd[1]);
+			e = atoi(cmd[1]);
 			free(cmd[0]);
 			write(1, "exit\n", 5);
 			check_env(stnvf);
