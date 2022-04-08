@@ -50,7 +50,7 @@ int ex_it(char **cmd, char *argv, int *stnvf)
 				free(cmd[0]);
 				exit(2);
 			}
-			e = atoi(cmd[1]);
+			e = _atoi(cmd[1]);
 			free(cmd[0]);
 			write(1, "exit\n", 5);
 			check_env(stnvf);

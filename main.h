@@ -6,7 +6,6 @@
 #include <stdio.h>
 #include <sys/stat.h>
 #include <stdarg.h>
-#include <string.h>
 /**
  * struct built_ins - struct to store built ins.
  * @name: name of the built in.
@@ -24,6 +23,7 @@ typedef struct built_ins
 extern char **environ;
 #define UNUSED __attribute__((unused))
 
+int _atoi(char *s);
 int _setenv(char **cmd, char *argv, int *stnvf);
 void check_env(int *stnvf);
 int _unsetenv(char **cmd, char *argv, int *stnvf);
