@@ -41,7 +41,7 @@ int main(int argc __attribute__((unused)), char **argv)
 			continue;
 		}
 		if (!id)
-			_execve(cmd);
+			_execve(cmd, argv[0], c);
 		else if (id > 0)
 			wait(NULL);
 	}
