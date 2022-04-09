@@ -37,11 +37,12 @@ extern char **environ;
 #define UNUSED __attribute__((unused))
 
 void handler(int num UNUSED);
+void setenv_help(char **env, int len1, int len2, char **cmd, f_s **head);
 void _prompt(void);
 void c_lnkdlist(f_s **head, char *s);
+void cd_set(char **cd, char *c_dir, char *p_dir, char *arv, f_s **head, int i);
 void free_list(f_s *head);
 int _setenv(char **cmd, char *argv, f_s **head);
-void check_env(void);
 int _unsetenv(char **cmd, char *argv);
 int array2d_len(char **a);
 int str_cmp(char *s1, char *s2);
@@ -50,7 +51,7 @@ int isnt_digit(char *s);
 int builtin_check(char **cmd, b_i *builtins, char *argv, f_s **head);
 int printenv(char **cmd, char *argv);
 void printf_error(char *cmd, char *argv, int c);
-void _execve(char **cmd);
+void _execve(char **cmd, char *argv, int c);
 int _fork(int s, char *wcmd);
 char *iteration(char **delim2, char *delim, char *str, int *i, int *j, int *k);
 int strn_cmp(char *s1, char *s2, int n);
