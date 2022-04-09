@@ -72,7 +72,7 @@ char *_getenv(char *name)
  */
 char *_which(char *cmd)
 {
-	char s[1024], **path, *tk, *cat, *ar;
+	char s[8192], **path, *tk, *cat, *ar;
 	int i, j;
 	struct stat st;
 
@@ -85,31 +85,31 @@ char *_which(char *cmd)
 	ar[0] = '/';
 	ar[1] = '\0';
 	ar = str_cat(ar, cmd);
-	str_cpy(s, _getenv("PATH"));
-	tk = str_tok(s, ":=");
-	for (i = 0; tk; i++, tk = str_tok(NULL, ":"))
-		path[i] = tk;
-	path[i] = NULL;
-	for (j = 0; path[j]; j++)
+	if (_getenv("PATH"))
 	{
-		cat = malloc(str_len(path[j]) + str_len(ar) + 1);
-		if (!cat)
+		str_cpy(s, _getenv("PATH"));
+		tk = str_tok(s, ":=");
+		for (i = 0; tk; i++, tk = str_tok(NULL, ":"))
+			path[i] = tk;
+		path[i] = NULL;
+		for (j = 0; path[j]; j++)
 		{
-			free(ar);
-			free(path);
-			return (NULL);
-		}
-		cat = str_cpy(cat, path[j]);
-		cat = str_cat(cat, ar);
-		if (stat(cat, &st) == 0)
-		{
-			free(ar);
-			free(path);
-			return (cat);
-		}
+			cat = malloc(str_len(path[j]) + str_len(ar) + 1);
+			if (!cat)
+			{
+				free(ar), free(path);
+				return (NULL);
+			}
+			cat = str_cpy(cat, path[j]);
+			cat = str_cat(cat, ar);
+			if (!stat(cat, &st))
+			{
+				free(ar), free(path);
+				return (cat);
+			}
 		free(cat);
+		}
 	}
-	free(ar);
-	free(path);
+	free(ar), free(path);
 	return (NULL);
 }

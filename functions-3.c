@@ -46,21 +46,24 @@ int array2d_len(char **a)
 		;
 	return (i);
 }
+
 /**
- * check_env - checks the environ array and frees if needed.
- * @stnvf: number of new value allocated in envrion.
+ * setenv_help - helper function fot _setenv().
+ * @env: address of environment varaible to modify.
+ * @len1: lenght of NAME.
+ * @len2: lenght of VALUE.
+ * @cmd: commands.
+ * @head: address of linked list.
  */
-void check_env(int *stnvf)
+void setenv_help(char **env, int len1, int len2, char **cmd, f_s **head)
 {
-	int i;
-
-	if (*stnvf)
-	{
-		for (i = array2d_len(environ) - *stnvf; environ[i]; i++)
-			free(environ[i]);
-	}
+	*env = malloc(sizeof(char) * (len1 + len2 + 3));
+	str_cpy(*env, cmd[1]);
+	(*env)[len1] = '=';
+	(*env)[len1 + 1] = '\0';
+	str_cat(*env, cmd[2]);
+	c_lnkdlist(head, *env);
 }
-
 /**
  * _atoi - Converts a string to an integer.
  * @s: address to s.

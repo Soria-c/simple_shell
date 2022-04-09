@@ -31,18 +31,27 @@ int _fork(int s, char *wcmd)
 /**
  * _execve - executes command from user.
  * @cmd: commands.
+ * @argv: current name of the program.
+ * @c: program prompt counter.
  */
-void _execve(char **cmd)
+void _execve(char **cmd, char *argv, int c)
 {
 	int rexc;
-	char *wcmd;
+	char *wcmd, *lin = cmd[0];
 
 	rexc = execve(cmd[0], cmd, NULL);
 	if (rexc == -1)
 	{
 		wcmd = _which(cmd[0]);
 		cmd[0] = wcmd;
-		execve(wcmd, cmd, NULL);
+		rexc = execve(wcmd, cmd, NULL);
+		if (rexc == -1)
+		{
+			printf_error(cmd[0], argv, c);
+			free(wcmd);
+			free(lin);
+			_exit(1);
+		}
 	}
 }
 /**
@@ -61,10 +70,10 @@ void printf_error(char *cmd, char *argv, int c)
  * @cmd: commands.
  * @builtins: array of built in structs.
  * @argv: current name of the program.
- * @stnvf: number of new values allocated in environ.
+ * @head: address of linked list.
  * Return: 0 if a built in is found, 1 otherwise
  */
-int builtin_check(char **cmd, b_i *builtins, char *argv, int *stnvf)
+int builtin_check(char **cmd, b_i *builtins, char *argv, f_s **head)
 {
 	int r = 1, i;
 
@@ -72,10 +81,9 @@ int builtin_check(char **cmd, b_i *builtins, char *argv, int *stnvf)
 	{
 		if (!(str_cmp(cmd[0], builtins[i].name)))
 		{
-			if (!str_cmp(cmd[0], "exit") ||
-				!str_cmp(cmd[0], "setenv") ||
-				!str_cmp(cmd[0], "unsetenv"))
-				r = builtins[i].func_ex(cmd, argv, stnvf);
+			if	(!(str_cmp(cmd[0], "setenv")) || !(str_cmp(cmd[0], "cd")) ||
+			!(str_cmp(cmd[0], "exit")))
+				r = builtins[i].func_lst(cmd, argv, head);
 			else
 				r = builtins[i].func_ptr(cmd, argv);
 		}
