@@ -6,32 +6,48 @@
 #include <stdio.h>
 #include <sys/stat.h>
 #include <stdarg.h>
+#include <sys/wait.h>
+#include <signal.h>
+
+/**
+ * struct f_string - linked list to store malloc created strings.
+ * @str: address of a string created by malloc.
+ * @next: next struct.
+ */
+typedef struct f_string
+{
+	char *str;
+	struct f_string *next;
+} f_s;
+
 /**
  * struct built_ins - struct to store built ins.
  * @name: name of the built in.
  * @func_ptr: function pointer.
- * @func_ex: function pointer.
+ * @func_lst: function pointer.
  */
-
 typedef struct built_ins
 {
 	char *name;
 	int (*func_ptr)(char **cmd, char *argv);
-	int (*func_ex)(char **cmd, char *argv, int *stnvf);
+	int (*func_lst)(char **cmd, char *argv, f_s **head);
 } b_i;
 
 extern char **environ;
 #define UNUSED __attribute__((unused))
 
-int _atoi(char *s);
-int _setenv(char **cmd, char *argv, int *stnvf);
-void check_env(int *stnvf);
-int _unsetenv(char **cmd, char *argv, int *stnvf);
+void handler(int num UNUSED);
+void _prompt(void);
+void c_lnkdlist(f_s **head, char *s);
+void free_list(f_s *head);
+int _setenv(char **cmd, char *argv, f_s **head);
+void check_env(void);
+int _unsetenv(char **cmd, char *argv);
 int array2d_len(char **a);
 int str_cmp(char *s1, char *s2);
-int ex_it(char **cmd, char *argv, int *stnvf);
+int ex_it(char **cmd, char *argv, f_s **head);
 int isnt_digit(char *s);
-int builtin_check(char **cmd, b_i *builtins, char *argv, int *stnvf);
+int builtin_check(char **cmd, b_i *builtins, char *argv, f_s **head);
 int printenv(char **cmd, char *argv);
 void printf_error(char *cmd, char *argv, int c);
 void _execve(char **cmd);
@@ -57,5 +73,7 @@ void str_rev(char *s);
 void to_string(char *s, int n);
 int check(char *fs, char *s, int *op, int sz);
 int fs_init(char *s, va_list args);
+int _atoi(char *s);
+int _cd(char **cmd, char *argv, f_s **head);
 
 #endif /*MAIN_H*/
