@@ -1,8 +1,4 @@
 #include "main.h"
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <sys/wait.h>
 
 /**
  * main - entry point, takes input from user.
@@ -12,26 +8,26 @@
  */
 int main(int argc __attribute__((unused)), char **argv)
 {
-	char *lin = NULL, *wcmd, *tk, *cmd[32];
+	char *lin = NULL, *wcmd = NULL, *tk = NULL, *cmd[256];
 	size_t n = 0;
-	ssize_t r;
-	int id, status, i, s, c = 0, b, stnvf = 0;
+	f_s *head = NULL;
+	int id, i, s = 1, c = 0, r;
 	struct stat st;
 	b_i builtins[] = {{"exit", NULL, ex_it}, {"env", printenv, NULL},
-	{"setenv", NULL, _setenv}, {"unsetenv", NULL, _unsetenv}, {NULL, NULL, NULL}};
+	{"setenv", NULL, _setenv}, {"unsetenv", _unsetenv, NULL},
+	{"cd", NULL, _cd}, {NULL, NULL, NULL}};
 
-	_printf("Kali $: ");
-	for (; (r = getline(&lin, &n, stdin)) != -1; _printf("Kali $: "))
+	signal(SIGINT, handler);
+	for (_prompt(); (r = getline(&lin, &n, stdin)) != -1; _prompt())
 	{
 		c++;
 		if (lin[r - 1] == '\n')
 			lin[r - 1] = '\0';
-		tk = str_tok(lin, " ");
-		for (i = 0; tk; tk = str_tok(NULL, " "), i++)
+		tk = str_tok(lin, " \t");
+		for (i = 0; tk; tk = str_tok(NULL, " \t"), i++)
 			cmd[i] = tk;
 		cmd[i] = NULL;
-		b = builtin_check(cmd, builtins, argv[0], &stnvf);
-		if (!(*cmd[0]) || !b)
+		if (!(*cmd[0]) || !builtin_check(cmd, builtins, argv[0], &head))
 			continue;
 		s = stat(cmd[0], &st);
 		if (s)
@@ -47,9 +43,10 @@ int main(int argc __attribute__((unused)), char **argv)
 		if (!id)
 			_execve(cmd);
 		else if (id > 0)
-			wait(&status);
+			wait(NULL);
 	}
-	check_env(&stnvf);
+	free_list(head);
 	free(lin);
 	return (0);
 }
+
