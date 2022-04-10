@@ -24,18 +24,23 @@ void c_lnkdlist(f_s **head, char *s)
 }
 
 /**
- * free_list - frees a list_t list.
- * @head: address of linked list.
+ * free_list - frees linked lists.
+ * @head: address of malloc strings linked list.
+ * @head0: address of commands linked list.
  */
-void free_list(f_s *head)
+void free_list(f_s *head, cmds *head0)
 {
 	f_s *s;
+	cmds *tmp;
 
 	for (; head; free(s->str), free(s))
 	{
 		s = head;
 		head = head->next;
 	}
+
+	for (; head0; head0 = head0->next, free(tmp))
+		tmp = head0;
 }
 
 /**
