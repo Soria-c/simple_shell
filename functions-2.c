@@ -33,21 +33,23 @@ int _fork(int s, char *wcmd)
  * @cmd: commands.
  * @argv: current name of the program.
  * @c: program prompt counter.
+ * @head: address of malloc string linked list to be freed is necessary.
+│* @cm: address of linked list cm to be freed if necessary.
  */
-void _execve(char **cmd, char *argv, int c)
+void _execve(char **cmd, char *argv, int c, cmds *cm, f_s **head)
 {
 	int rexc;
 	char *wcmd, *lin = cmd[0];
 
-	rexc = execve(cmd[0], cmd, NULL);
+	rexc = execve(cmd[0], cmd, environ);
 	if (rexc == -1)
 	{
 		wcmd = _which(cmd[0]);
-		cmd[0] = wcmd;
-		rexc = execve(wcmd, cmd, NULL);
+		rexc = execve(wcmd, cmd, environ);
 		if (rexc == -1)
 		{
 			printf_error(cmd[0], argv, c);
+			free_list(*head, cm);
 			free(wcmd);
 			free(lin);
 			_exit(1);
@@ -70,10 +72,11 @@ void printf_error(char *cmd, char *argv, int c)
  * @cmd: commands.
  * @builtins: array of built in structs.
  * @argv: current name of the program.
- * @head: address of linked list.
+ * @head: address of malloc strings linked list.
+ * @cm: address of commands linked list.
  * Return: 0 if a built in is found, 1 otherwise
  */
-int builtin_check(char **cmd, b_i *builtins, char *argv, f_s **head)
+int builtin_check(char **cmd, b_i *builtins, char *argv, f_s **head, cmds *cm)
 {
 	int r = 1, i;
 
@@ -81,9 +84,10 @@ int builtin_check(char **cmd, b_i *builtins, char *argv, f_s **head)
 	{
 		if (!(str_cmp(cmd[0], builtins[i].name)))
 		{
-			if	(!(str_cmp(cmd[0], "setenv")) || !(str_cmp(cmd[0], "cd")) ||
-			!(str_cmp(cmd[0], "exit")))
+			if	(!str_cmp(cmd[0], "setenv") || !str_cmp(cmd[0], "cd"))
 				r = builtins[i].func_lst(cmd, argv, head);
+			else if (!str_cmp(cmd[0], "exit"))
+				r = builtins[i].func_ex(cmd, argv, head, cm);
 			else
 				r = builtins[i].func_ptr(cmd, argv);
 		}
