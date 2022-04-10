@@ -68,4 +68,6 @@ void exec_all(cmds *cm, int c, char *argv, f_s **head, b_i *builtins)
 		_execve(cm->cmd, argv, c, cm, head);
 	else if (id > 0)
 		wait(NULL);
+	else
+		write(STDERR_FILENO, "Could not create process\n", 25);
 }
