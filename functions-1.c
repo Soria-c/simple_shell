@@ -72,14 +72,11 @@ char *_getenv(char *name)
  */
 char *_which(char *cmd)
 {
-	char s[8192], **path, *tk, *cat, *ar;
+	char s[8192], *path[8192], *tk, *cat, *ar;
 	int i, j;
 	struct stat st;
 
 	if (!cmd)
-		return (NULL);
-	path = malloc(sizeof(char) * 1024);
-	if (!path)
 		return (NULL);
 	ar = malloc(str_len(cmd) + 2);
 	ar[0] = '/';
@@ -97,19 +94,19 @@ char *_which(char *cmd)
 			cat = malloc(str_len(path[j]) + str_len(ar) + 1);
 			if (!cat)
 			{
-				free(ar), free(path);
+				free(ar);
 				return (NULL);
 			}
 			cat = str_cpy(cat, path[j]);
 			cat = str_cat(cat, ar);
 			if (!stat(cat, &st))
 			{
-				free(ar), free(path);
+				free(ar);
 				return (cat);
 			}
 		free(cat);
 		}
 	}
-	free(ar), free(path);
+	free(ar);
 	return (NULL);
 }
