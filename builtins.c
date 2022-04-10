@@ -2,10 +2,11 @@
 
 /**
  * printenv - prints the current environment.
- * @UNUSED: Macro.
+ * @c: commands.
+ * @a: current name of the program.
  * Return: 0 always.
  */
-int printenv(char **cmd UNUSED, char *argv UNUSED)
+int printenv(char **c __attribute__((unused)), char *a __attribute__((unused)))
 {
 	int i;
 
@@ -18,10 +19,11 @@ int printenv(char **cmd UNUSED, char *argv UNUSED)
  * ex_it - implementation of the exit shell built in.
  * @cmd: commands.
  * @argv: current name of the program.
- * @head: address of linked list.
+ * @head: address of malloc string linked list to be freed is necessary.
+ * @cm: address of linked list cm to be freed it if necessary
  * Return: 0 if it fails, otherwise exits the current shell
  */
-int ex_it(char **cmd, char *argv, f_s **head)
+int ex_it(char **cmd, char *argv, f_s **head, cmds *cm)
 {
 	unsigned char e;
 
@@ -35,7 +37,7 @@ int ex_it(char **cmd, char *argv, f_s **head)
 		if (!cmd[1])
 		{
 			free(cmd[0]);
-			free_list(*head);
+			free_list(*head, cm);
 			write(1, "exit\n", 5);
 			exit(0);
 		}
@@ -43,14 +45,14 @@ int ex_it(char **cmd, char *argv, f_s **head)
 		{
 			_printf("exit\n%s: exit: %s:", argv, cmd[1]);
 			_printf(" numeric argument required\n");
-			free_list(*head);
+			free_list(*head, cm);
 			free(cmd[0]);
 			exit(2);
 		}
 		e = _atoi(cmd[1]);
 		free(cmd[0]);
 		write(1, "exit\n", 5);
-		free_list(*head);
+		free_list(*head, cm);
 		exit(e);
 	}
 	return (0);
