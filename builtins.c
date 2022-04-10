@@ -11,7 +11,7 @@ int printenv(char **c __attribute__((unused)), char *a __attribute__((unused)))
 	int i;
 
 	for (i = 0; environ[i]; i++)
-		_printf("%s\n", environ[i]);
+		_printf(STDOUT_FILENO, "%s\n", environ[i]);
 	return (0);
 }
 
@@ -29,7 +29,7 @@ int ex_it(char **cmd, char *argv, f_s **head, cmds *cm)
 
 	if (array2d_len(cmd) >= 3 && !isnt_digit(cmd[1]))
 	{
-		_printf("exit\n%s: exit: too many arguments\n", argv);
+		_printf(STDERR_FILENO, "exit\n%s: exit: too many arguments\n", argv);
 		return (0);
 	}
 	else
@@ -38,20 +38,20 @@ int ex_it(char **cmd, char *argv, f_s **head, cmds *cm)
 		{
 			free(cmd[0]);
 			free_list(*head, cm);
-			write(1, "exit\n", 5);
+			write(STDOUT_FILENO, "exit\n", 5);
 			exit(0);
 		}
 		if ((isnt_digit(cmd[1]) && cmd[1][0] != '-') || isnt_digit(&cmd[1][1]))
 		{
-			_printf("exit\n%s: exit: %s:", argv, cmd[1]);
-			_printf(" numeric argument required\n");
-			free_list(*head, cm);
+			_printf(STDERR_FILENO, "exit\n%s: exit: %s:", argv, cmd[1]);
+			_printf(STDERR_FILENO, " numeric argument required\n");
 			free(cmd[0]);
+			free_list(*head, cm);
 			exit(2);
 		}
 		e = _atoi(cmd[1]);
 		free(cmd[0]);
-		write(1, "exit\n", 5);
+		write(STDOUT_FILENO, "exit\n", 5);
 		free_list(*head, cm);
 		exit(e);
 	}
@@ -71,13 +71,13 @@ int _setenv(char **cmd, char *argv, f_s **head)
 
 	if (array2d_len(cmd) != 3)
 	{
-		_printf("%s: setenv: wrong number of arguments\n", argv);
-		_printf("Usage: setenv VARIABLE VALUE\n");
+		_printf(STDERR_FILENO, "%s: setenv: wrong number of arguments\n", argv);
+		_printf(STDERR_FILENO, "Usage: setenv VARIABLE VALUE\n");
 		return (0);
 	}
 	if (checkex2(cmd[1], '=') || checkex2(cmd[2], '='))
 	{
-		_printf("%s: setenv: arguments must not contain '='\n", argv);
+		_printf(STDERR_FILENO, "%s: setenv: arguments must not contain '='\n", argv);
 		return (0);
 	}
 	len1 = str_len(cmd[1]);
@@ -116,8 +116,8 @@ int _unsetenv(char **cmd, char *argv __attribute__((unused)))
 
 	if (array2d_len(cmd) != 2)
 	{
-		_printf("%s: unsetenv: wrong number of arguments\n", argv);
-		_printf("Usage: unsetenv VARIABLE\n");
+		_printf(STDERR_FILENO, "%s: unsetenv: wrong number of arguments\n", argv);
+		_printf(STDERR_FILENO, "Usage: unsetenv VARIABLE\n");
 		return (0);
 	}
 	for (i = 0; environ[i]; i++)
@@ -127,7 +127,7 @@ int _unsetenv(char **cmd, char *argv __attribute__((unused)))
 	}
 	if (!environ[i])
 	{
-		_printf("%s: unsetenv: %s not found\n", argv, cmd[1]);
+		_printf(STDERR_FILENO, "%s: unsetenv: %s not found\n", argv, cmd[1]);
 		return (0);
 	}
 	for (; environ[i]; i++)
@@ -150,8 +150,8 @@ int _cd(char **cmd, char *argv, f_s **head)
 	cdcmd[3] = NULL;
 	if (array2d_len(cmd) > 2)
 	{
-		_printf("%s: cd: too many arguments\n", argv);
-		_printf("Usage: cd [DIRECTORY]\n");
+		_printf(STDERR_FILENO, "%s: cd: too many arguments\n", argv);
+		_printf(STDERR_FILENO, "Usage: cd [DIRECTORY]\n");
 		return (0);
 	}
 	if (cmd[1] && str_len(cmd[1]) == 1 && cmd[1][0] == '-')
@@ -162,7 +162,8 @@ int _cd(char **cmd, char *argv, f_s **head)
 	p_dir = getcwd(NULL, 0);
 	if (cmd[1] && chdir(cmd[1]))
 	{
-		_printf("%s: cd: %s: No such file or directory\n", argv, cmd[1]);
+		_printf(STDERR_FILENO, "%s: cd: %s: ", argv, cmd[1]);
+		_printf(STDERR_FILENO, "No such file or directory\n");
 		free(p_dir);
 		return (0);
 	}
@@ -181,7 +182,6 @@ int _cd(char **cmd, char *argv, f_s **head)
 	cdcmd[1] = "PWD";
 	cdcmd[2] = c_dir;
 	_setenv(cdcmd, argv, head);
-	free(c_dir);
-	free(p_dir);
+	free(c_dir), free(p_dir);
 	return (0);
 }
