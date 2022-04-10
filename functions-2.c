@@ -52,7 +52,7 @@ void _execve(char **cmd, char *argv, int c, cmds *cm, f_s **head)
 			free_list(*head, cm);
 			free(wcmd);
 			free(lin);
-			_exit(1);
+			_exit(127);
 		}
 	}
 }
