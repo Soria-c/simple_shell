@@ -10,6 +10,19 @@
 #include <signal.h>
 
 /**
+ * struct commands - linked list to store commands
+ * @sline: commands delimited by ;
+ * @cmd: array of delimited commands.
+ * @next: next struct.
+ */
+typedef struct commands
+{
+	char *sline;
+	char *cmd[256];
+	struct commands *next;
+} cmds;
+
+/**
  * struct f_string - linked list to store malloc created strings.
  * @str: address of a string created by malloc.
  * @next: next struct.
@@ -25,33 +38,37 @@ typedef struct f_string
  * @name: name of the built in.
  * @func_ptr: function pointer.
  * @func_lst: function pointer.
+ * @func_ex: function pointer.
  */
 typedef struct built_ins
 {
 	char *name;
 	int (*func_ptr)(char **cmd, char *argv);
 	int (*func_lst)(char **cmd, char *argv, f_s **head);
+	int (*func_ex)(char **cmd, char *argv, f_s **head, cmds *cm);
 } b_i;
 
 extern char **environ;
 #define UNUSED __attribute__((unused))
 
+void exec_all(cmds *cm, int c, char *argv, f_s **head, b_i *builtins);
+cmds *command_builder(char *s);
 void handler(int num UNUSED);
 void setenv_help(char **env, int len1, int len2, char **cmd, f_s **head);
 void _prompt(void);
 void c_lnkdlist(f_s **head, char *s);
 void cd_set(char **cd, char *c_dir, char *p_dir, char *arv, f_s **head, int i);
-void free_list(f_s *head);
+void free_list(f_s *head, cmds *head0);
 int _setenv(char **cmd, char *argv, f_s **head);
 int _unsetenv(char **cmd, char *argv);
 int array2d_len(char **a);
 int str_cmp(char *s1, char *s2);
-int ex_it(char **cmd, char *argv, f_s **head);
+int ex_it(char **cmd, char *argv, f_s **head, cmds *cm);
 int isnt_digit(char *s);
-int builtin_check(char **cmd, b_i *builtins, char *argv, f_s **head);
+int builtin_check(char **cmd, b_i *builtins, char *argv, f_s **head, cmds *cm);
 int printenv(char **cmd, char *argv);
 void printf_error(char *cmd, char *argv, int c);
-void _execve(char **cmd, char *argv, int c);
+void _execve(char **cmd, char *argv, int c, cmds *cm, f_s **head);
 int _fork(int s, char *wcmd);
 char *iteration(char **delim2, char *delim, char *str, int *i, int *j, int *k);
 int strn_cmp(char *s1, char *s2, int n);
