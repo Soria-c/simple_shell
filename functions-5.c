@@ -1,7 +1,7 @@
 #include "main.h"
 
 /**
- * command_builder - classificates commands from s and adds
+ * command_builder - classifies commands from s and adds
  * them to the cmds linked list.
  * @s: input taken from getline.
  * Return: address of linked list.
