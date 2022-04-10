@@ -66,7 +66,7 @@ int str_cmp(char *s1, char *s2);
 int ex_it(char **cmd, char *argv, f_s **head, cmds *cm);
 int isnt_digit(char *s);
 int builtin_check(char **cmd, b_i *builtins, char *argv, f_s **head, cmds *cm);
-int printenv(char **cmd, char *argv);
+int printenv(char **c, char *a);
 void printf_error(char *cmd, char *argv, int c);
 void _execve(char **cmd, char *argv, int c, cmds *cm, f_s **head);
 int _fork(int s, char *wcmd);
