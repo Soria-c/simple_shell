@@ -6,8 +6,9 @@
 void _prompt(void)
 {
 	if (isatty(STDIN_FILENO))
-		_printf("Kali $: ");
+		_printf(STDOUT_FILENO, "Kali $: ");
 }
+
 /**
  * c_lnkdlist - creates and updates linked list.
  * @head: address of head.

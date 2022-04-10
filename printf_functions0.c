@@ -39,10 +39,11 @@ int fs_init(char *s, va_list args)
 /**
  * _printf - prints a formatted string
  * @format: imput string
+ * @mod: number of the file descriptor.
  * Return: number of bytes if is SUCCESS, -1 otherwise.
  */
 
-int _printf(const char *format, ...)
+int _printf(int mod, const char *format, ...)
 {
 	va_list args;
 	char *f_check, init[2048];
@@ -58,7 +59,7 @@ int _printf(const char *format, ...)
 		continue;
 	if (i == lenght)
 	{
-		write(STDOUT_FILENO, format, lenght);
+		write(mod, format, lenght);
 		va_end(args);
 		return (lenght);
 	}
@@ -68,7 +69,7 @@ int _printf(const char *format, ...)
 		va_end(args);
 	}
 	bytes = str_len(init);
-	write(STDOUT_FILENO, init, bytes + total);
+	write(mod, init, bytes + total);
 	if (s == 3)
 		return (bytes + total);
 	if (s == -1)

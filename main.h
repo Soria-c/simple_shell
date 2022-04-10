@@ -82,7 +82,7 @@ char *delimf(char *delim);
 int checkex2(char *s, char s2);
 int checkex(char *s, char s2, int n);
 char *str_tok(char *str, char *delim);
-int _printf(const char *format, ...);
+int _printf(int mod, const char *format, ...);
 int fs(const char *format, char *fs, char *s, int sz, va_list a, int z, int w);
 int pc(const char *fm, char *f, char c, int x, va_list a, int o, int z, int w);
 int p(const char *fm, char *f, char *s, int x, va_list a, int o, int z, int w);
