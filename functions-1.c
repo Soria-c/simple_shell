@@ -73,10 +73,12 @@ char *_getenv(char *name)
 char *_which(char *cmd)
 {
 	char s[8192], *path[8192], *tk, *cat, *ar;
-	int i, j;
+	int i, j, k;
 	struct stat st;
 
-	if (!cmd)
+	for (k = 0; cmd[k] != '/' && cmd[k]; k++)
+		;
+	if (cmd[k])
 		return (NULL);
 	ar = malloc(str_len(cmd) + 2);
 	ar[0] = '/';
