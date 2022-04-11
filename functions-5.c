@@ -97,14 +97,14 @@ int check_route(char *cmd)
 			;
 		if (!cmd[k])
 			return (1);
-
 	}
+	else
+		return (1);
 	if (str_len(cmd) <= 5)
 		return (1);
-
-		for (k = 5; cmd[k] == '/' && cmd[k]; k++)
+	for (k = 5; cmd[k] == '/' && cmd[k]; k++)
 			;
-		if (!cmd[k])
+	if (!cmd[k])
 			return (1);
 	return (0);
 }
