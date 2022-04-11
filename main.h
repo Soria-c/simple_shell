@@ -50,7 +50,6 @@ typedef struct built_ins
 
 extern char **environ;
 #define UNUSED __attribute__((unused))
-#define EX_STAT 0
 
 cmds *command_builder(char *s);
 void handler(int num UNUSED);
