@@ -27,30 +27,11 @@ int printenv(char **c __attribute__((unused)), char *a __attribute__((unused)))
 int ex_it(char **cmd, char *argv __attribute__((unused))
 , f_s **head, cmds *f, char *l)
 {
-	int e;
-
-	if (array2d_len(cmd) >= 3 && !isnt_digit(cmd[1]))
+	if (!cmd[1])
 	{
-		return (0);
-	}
-	else
-	{
-		if (!cmd[1])
-		{
-			free(l);
-			free_list(*head, f);
-			exit(0);
-		}
-		if ((isnt_digit(cmd[1]) && cmd[1][0] != '-') || isnt_digit(&cmd[1][1]))
-		{
-			free(l);
-			free_list(*head, f);
-			exit(0);
-		}
-		e = _atoi(cmd[1]);
 		free(l);
 		free_list(*head, f);
-		exit(e);
+		exit(0);
 	}
 	return (0);
 }
