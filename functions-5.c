@@ -51,25 +51,79 @@ void exe(cmds *cm, int c, char *argv, f_s **head, b_i *bins, cmds *f, char *l)
 {
 	struct stat st;
 	int s, id;
-	char *wcmd;
+	char *wcmd = NULL;
 
 	if (!*(cm->cmd[0]) || !bin_chck(cm->cmd, bins, argv, head, f, l))
 		return;
 	s = stat(cm->cmd[0], &st);
 	if (s)
 		wcmd = _which(cm->cmd[0]);
-	if ((!s) || (s && wcmd))
+	if (!check_input(cm->cmd[0], wcmd, s, 0) && 
+		!check_input(cm->cmd[0], wcmd, s, 1))
+		return;
+	if (!s || wcmd)
+	{
 		id = _fork(s, wcmd);
+		if (!id)
+			_execve(cm->cmd, argv, c, head, f, l);
+		else if (id > 0)
+			wait(NULL);
+		else
+			write(STDERR_FILENO, "Could not create process\n", 25);
+		}
 	else
 	{
-		free(wcmd);
-		printf_error(cm->cmd[0], argv, c);
-		return;
+		if (wcmd)
+			free(wcmd);
+		printf("Command not found\n");
 	}
-	if (!id)
-		_execve(cm->cmd, argv, c, head, f, l);
-	else if (id > 0)
-		wait(NULL);
-	else
-		write(STDERR_FILENO, "Could not create process\n", 25);
+}
+
+int check_input(char *s, char *wcmd, int st, int mod)
+{
+
+	if (!mod)
+	{
+		if (!wcmd && (strn_cmp(s, "/bin", 4) || str_len(s) <= 5))
+		{
+			if (!st)
+				printf("is a directory\n");
+			else
+				printf("Command not found0\n");
+			return (0);
+		}
+		else if (!wcmd && !(strn_cmp(s, "/bin", 4)) && !checksh(&s[5]))
+		{
+			printf("Not such file or directory\n");
+			return (0);
+		}
+		return (1);
+	}
+	if (!wcmd && (strn_cmp(s, "/usr/bin", 8) || str_len(s) <= 9))
+	{
+		if (!st)
+			printf("is a directory\n");
+		else
+			printf("Command not found0\n");
+		return (0);
+	}
+	else if (!wcmd && !(strn_cmp(s, "/usr/bin", 8)) && !checksh(&s[8]))
+	{
+		printf("Not such file or directory\n");
+		return (0);
+	}
+	return (1);
+}
+
+
+int checksh(char *s)
+{
+	int i;
+
+	for (i = 0; s[i] == '/' && s[i]; i++)
+		;
+	if (!s[i])
+		return (0);
+	return (1);
+
 }
