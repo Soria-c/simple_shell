@@ -58,11 +58,6 @@ void exe(cmds *cm, int c, char *argv, f_s **head, b_i *bins, cmds *f, char *l)
 	s = stat(cm->cmd[0], &st);
 	if (s)
 		wcmd = _which(cm->cmd[0]);
-	else if (check_route(cm->cmd[0]))
-	{
-		printf_error(cm->cmd[0], argv, c);
-		return;
-	}
 	if ((!s) || (s && wcmd))
 		id = _fork(s, wcmd);
 	else
@@ -78,33 +73,4 @@ void exe(cmds *cm, int c, char *argv, f_s **head, b_i *bins, cmds *f, char *l)
 	else
 		write(STDERR_FILENO, "Could not create process\n", 25);
 }
-/**
- * check_route - checks validity of a route
- * @cmd: command
- * Return: 1 if route is invalid, 0 otherwise.
- */
-int check_route(char *cmd)
-{
-	int k, len = str_len(cmd);
 
-
-	if (!strn_cmp(cmd, "/usr/bin", 8))
-	{
-		if (len <= 9)
-			return (1);
-
-		for (k = 9; cmd[k] == '/' && cmd[k]; k++)
-			;
-		if (!cmd[k])
-			return (1);
-	}
-	else if (strn_cmp(cmd, "/bin", 4))
-		return (1);
-	if (str_len(cmd) <= 5)
-		return (1);
-	for (k = 5; cmd[k] == '/' && cmd[k]; k++)
-			;
-	if (!cmd[k])
-			return (1);
-	return (0);
-}
