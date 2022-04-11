@@ -1,0 +1,42 @@
+.TH man 1 "April 12, 2022" "Simple Shell Proyect"
+.SH NAME
+.B Simple Shell
+.SH SYNOPSIS
+[command_string [arg ...][file]]
+.SH DESCRIPTION
+Emulator of a command line interpreter that reads and executes basic Unix Shell commands using input from the user. It was developed using the c programming language and it works in 2 modes.
+.TP
+.B Interactive Mode
+.TP
+The shell takes the commands from the input using getline executes them and read another command-line and display another line.
+.TP
+.B Non-interactive Mode
+.TP
+This mode reads the commands from a file sent through a pipe, the commands will be executed and do not display another line.
+.SH USER INPUT
+Input command and hit enter. The shell will do the following:
+.TP
+1. Command will become an array.
+.TP
+2. Looks for commands.
+.TP
+3. Executes command.
+.SH EXAMPLE
+.TP
+#cisfun$ ls
+.TP
+barbie_j  env-main.c  exec.c  fork.c  pid.c  ppid.c    prompt   prompt.c  shell.c  stat.c
+.TP
+#cisfun$ pwd
+.TP
+/home/vagrant/simple_shell
+.SH AUTHORS
+Carlos Soria <https://github.com/Soria-c/simple_shell>
+.TP
+Juan Carlos Garay <https://github.com/UNICA-FIME?tab=repositories>
+.SH SEE ALSO
+.BR man
+.BR sh
+
+.BR man
+.BR bash
