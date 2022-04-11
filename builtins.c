@@ -30,7 +30,7 @@ int ex_it(char **cmd, char *argv __attribute__((unused))
 {
 	int e;
 
-	if (array2d_len(cmd) >= 2 && !isnt_digit(cmd[1]))
+	if (array2d_len(cmd) >= 3 && !isnt_digit(cmd[1]))
 	{
 		return (0);
 	}
