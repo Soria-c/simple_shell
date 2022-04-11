@@ -51,10 +51,7 @@ typedef struct built_ins
 extern char **environ;
 #define UNUSED __attribute__((unused))
 
-
 cmds *command_builder(char *s);
-int checksh(char *s);
-int check_input(char *s, char* wcmd, int st, int mod);
 void handler(int num UNUSED);
 void setenv_help(char **env, int len1, int len2, char **cmd, f_s **head);
 void _prompt(void);
