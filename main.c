@@ -11,6 +11,12 @@ void money(char **lin, int *xs)
 
 	for (i = 0; (*lin)[i]; i++)
 	{
+		if ((*lin)[i] == '#' && (*lin)[i - 1] == ' ')
+		{
+			(*lin)[i] = '\0';
+			break;
+
+		}
 		if ((*lin)[i] == '$')
 		{
 			if ((*lin)[i + 1] ==  '?')
