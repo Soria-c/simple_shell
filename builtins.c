@@ -39,7 +39,7 @@ int ex_it(char **cmd, char *argv __attribute__((unused))
 		{
 			free(l);
 			free_list(*head, f);
-			exit(0);
+			exit(2);
 		}
 		if ((isnt_digit(cmd[1]) && cmd[1][0] != '-') || isnt_digit(&cmd[1][1]))
 		{
