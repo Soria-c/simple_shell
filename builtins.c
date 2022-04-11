@@ -24,13 +24,13 @@ int printenv(char **c __attribute__((unused)), char *a __attribute__((unused)))
  * @l: address of input line, to be freed if necessary.
  * Return: 0 if it fails, otherwise exits the current shell
  */
-int ex_it(char **cmd, char *argv, f_s **head, cmds *f, char *l)
+int ex_it(char **cmd, char *argv __attribute__((unused))
+, f_s **head, cmds *f, char *l)
 {
 	unsigned char e;
 
 	if (array2d_len(cmd) >= 3 && !isnt_digit(cmd[1]))
 	{
-		_printf(STDERR_FILENO, "exit\n%s: exit: too many arguments\n", argv);
 		return (0);
 	}
 	else
@@ -39,20 +39,16 @@ int ex_it(char **cmd, char *argv, f_s **head, cmds *f, char *l)
 		{
 			free(l);
 			free_list(*head, f);
-			write(STDOUT_FILENO, "exit\n", 5);
 			exit(0);
 		}
 		if ((isnt_digit(cmd[1]) && cmd[1][0] != '-') || isnt_digit(&cmd[1][1]))
 		{
-			_printf(STDERR_FILENO, "exit\n%s: exit: %s:", argv, cmd[1]);
-			_printf(STDERR_FILENO, " numeric argument required\n");
 			free(l);
 			free_list(*head, f);
 			exit(2);
 		}
 		e = _atoi(cmd[1]);
 		free(l);
-		write(STDOUT_FILENO, "exit\n", 5);
 		free_list(*head, f);
 		exit(e);
 	}
