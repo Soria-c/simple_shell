@@ -11,7 +11,7 @@ int main(int argc __attribute__((unused)), char **argv)
 	char *lin = NULL;
 	size_t n = 0;
 	f_s *head = NULL;
-	int c = 0, r;
+	int c = 0, r, xs = 0;
 	cmds *cm, *fcm;
 	b_i builtins[] = {{"exit", NULL, NULL, ex_it},
 			{"env", printenv, NULL, NULL},
@@ -28,7 +28,7 @@ int main(int argc __attribute__((unused)), char **argv)
 			lin[r - 1] = '\0';
 		fcm = cm = command_builder(lin);
 		for (; cm; cm = cm->next)
-			exe(cm, c, argv[0], &head, builtins, fcm, lin);
+			exe(cm, c, argv[0], &head, builtins, fcm, lin, &xs);
 		free_list(NULL, fcm);
 	}
 	free_list(head, NULL);

@@ -41,19 +41,20 @@ cmds *command_builder(char *s)
  * exe - executes all commands from the cm linked list.
  * @cm: commands linked list, at each iteration the address will change.
  * @c: counts the number of times the prompt has been printed.
- * @argv: current name of the program.
- * @head: linked list of some strings created by malloc.
+ * @a: current name of the program.
+ * @h: linked list of some strings created by malloc.
  * @f: Head of the commands linked list.
- * @bins: struct countaining pointers to builtin functions
+ * @bi: struct countaining pointers to builtin functions
  * @l: address of input line.
+ * @xs: exit status of the previous command
  */
-void exe(cmds *cm, int c, char *argv, f_s **head, b_i *bins, cmds *f, char *l)
+void exe(cmds *cm, int c, char *a, f_s **h, b_i *bi, cmds *f, char *l, int *xs)
 {
 	struct stat st;
-	int s, id;
+	int s, id, k;
 	char *wcmd;
 
-	if (!*(cm->cmd[0]) || !bin_chck(cm->cmd, bins, argv, head, f, l))
+	if (!*(cm->cmd[0]) || !bin_chck(cm->cmd, bi, a, h, f, l, xs))
 		return;
 	s = stat(cm->cmd[0], &st);
 	if (s)
@@ -63,13 +64,17 @@ void exe(cmds *cm, int c, char *argv, f_s **head, b_i *bins, cmds *f, char *l)
 	else
 	{
 		free(wcmd);
-		printf_error(cm->cmd[0], argv, c);
+		printf_error(cm->cmd[0], a, c);
 		return;
 	}
 	if (!id)
-		_execve(cm->cmd, argv, c, head, f, l);
+		_execve(cm->cmd, a, c, h, f, l);
 	else if (id > 0)
-		wait(NULL);
+	{
+		waitpid(id, &k, 0);
+		if (WIFEXITED(k))
+			*xs = WEXITSTATUS(k);
+	}
 	else
 		write(STDERR_FILENO, "Could not create process\n", 25);
 }

@@ -53,7 +53,7 @@ void _execve(char **cmd, char *argv, int c, f_s **head, cmds *f, char *l)
 			free(l);
 			free_list(*head, f);
 			free(wcmd);
-			_exit(127);
+			_exit(2);
 		}
 	}
 }
@@ -71,27 +71,28 @@ void printf_error(char *cmd, char *argv, int c)
 /**
  * bin_chck - checks for built in functions.
  * @cmd: commands.
- * @bins: array of built in structs.
- * @argv: current name of the program.
- * @head: address of malloc strings linked list.
+ * @bin: array of built in structs.
+ * @a: current name of the program.
+ * @h: address of malloc strings linked list.
  * @f: address of commands linked list.
  * @l: address pf input line.
+ * @xs: exit status of the previos command.
  * Return: 0 if a built in is found, 1 otherwise
  */
-int bin_chck(char **cmd, b_i *bins, char *argv, f_s **head, cmds *f, char *l)
+int bin_chck(char **cmd, b_i *bin, char *a, f_s **h, cmds *f, char *l, int *xs)
 {
 	int r = 1, i;
 
-	for (i = 0; bins[i].name; i++)
+	for (i = 0; bin[i].name; i++)
 	{
-		if (!(str_cmp(cmd[0], bins[i].name)))
+		if (!(str_cmp(cmd[0], bin[i].name)))
 		{
 			if	(!str_cmp(cmd[0], "setenv") || !str_cmp(cmd[0], "cd"))
-				r = bins[i].func_lst(cmd, argv, head);
+				r = bin[i].func_lst(cmd, a, h);
 			else if (!str_cmp(cmd[0], "exit"))
-				r = bins[i].func_ex(cmd, argv, head, f, l);
+				r = bin[i].func_ex(cmd, a, h, f, l, xs);
 			else
-				r = bins[i].func_ptr(cmd, argv);
+				r = bin[i].func_ptr(cmd, a);
 		}
 	}
 	return (r);

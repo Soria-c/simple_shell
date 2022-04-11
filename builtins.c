@@ -22,16 +22,17 @@ int printenv(char **c __attribute__((unused)), char *a __attribute__((unused)))
  * @head: address of malloc string linked list to be freed is necessary.
  * @f: address of linked list cm to be freed if necessary
  * @l: address of input line, to be freed if necessary.
+ * @xs: exit status of the previous program.
  * Return: 0 if it fails, otherwise exits the current shell
  */
 int ex_it(char **cmd, char *argv __attribute__((unused))
-, f_s **head, cmds *f, char *l)
+, f_s **head, cmds *f, char *l, int *xs)
 {
 	int e;
 
 	if (array2d_len(cmd) >= 2 && !isnt_digit(cmd[1]))
 	{
-		exit (2);
+		exit(2);
 	}
 	else
 	{
@@ -39,7 +40,7 @@ int ex_it(char **cmd, char *argv __attribute__((unused))
 		{
 			free(l);
 			free_list(*head, f);
-			exit(0);
+			exit(*xs);
 		}
 		if ((isnt_digit(cmd[1]) && cmd[1][0] != '-') || isnt_digit(&cmd[1][1]))
 		{

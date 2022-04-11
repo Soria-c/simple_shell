@@ -45,11 +45,12 @@ typedef struct built_ins
 	char *name;
 	int (*func_ptr)(char **cmd, char *argv);
 	int (*func_lst)(char **cmd, char *argv, f_s **head);
-	int (*func_ex)(char **cmd, char *argv, f_s **head, cmds *f, char *l);
+	int (*func_ex)(char **cmd, char *argv, f_s **head, cmds *f, char *l, int *xs);
 } b_i;
 
 extern char **environ;
 #define UNUSED __attribute__((unused))
+#define EX_STAT 0
 
 cmds *command_builder(char *s);
 void handler(int num UNUSED);
@@ -57,15 +58,15 @@ void setenv_help(char **env, int len1, int len2, char **cmd, f_s **head);
 void _prompt(void);
 void c_lnkdlist(f_s **head, char *s);
 void cd_set(char **cd, char *c_dir, char *p_dir, char *arv, f_s **head, int i);
-void exe(cmds *cm, int c, char *argv, f_s **head, b_i *bins, cmds *f, char *l);
+void exe(cmds *cm, int c, char *a, f_s **h, b_i *b, cmds *f, char *l, int *xs);
 void free_list(f_s *head, cmds *head0);
 int _setenv(char **cmd, char *argv, f_s **head);
 int _unsetenv(char **cmd, char *argv);
 int array2d_len(char **a);
 int str_cmp(char *s1, char *s2);
-int ex_it(char **cmd, char *argv, f_s **head, cmds *f, char *l);
+int ex_it(char **cmd, char *argv, f_s **head, cmds *f, char *l, int *xs);
 int isnt_digit(char *s);
-int bin_chck(char **cmd, b_i *bins, char *argv, f_s **head, cmds *cm, char *l);
+int bin_chck(char **cmd, b_i *bi, char *a, f_s **h, cmds *c, char *l, int *xs);
 int printenv(char **c, char *a);
 void printf_error(char *cmd, char *argv, int c);
 void _execve(char **cmd, char *argv, int c, f_s **head, cmds *f, char *l);
