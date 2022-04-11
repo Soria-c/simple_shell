@@ -32,6 +32,7 @@ int ex_it(char **cmd, char *argv __attribute__((unused))
 
 	if (array2d_len(cmd) >= 3 && !isnt_digit(cmd[1]))
 	{
+		*xs = 1;
 		return (0);
 	}
 	else
