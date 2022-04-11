@@ -32,7 +32,7 @@ int ex_it(char **cmd, char *argv __attribute__((unused))
 
 	if (array2d_len(cmd) >= 2 && !isnt_digit(cmd[1]))
 	{
-		exit(2);
+		return (0);
 	}
 	else
 	{
@@ -46,7 +46,7 @@ int ex_it(char **cmd, char *argv __attribute__((unused))
 		{
 			free(l);
 			free_list(*head, f);
-			exit(0);
+			exit(2);
 		}
 		e = _atoi(cmd[1]);
 		free(l);
