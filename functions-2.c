@@ -65,7 +65,7 @@ void _execve(char **cmd, char *argv, int c, f_s **head, cmds *f, char *l)
  */
 void printf_error(char *cmd, char *argv, int c)
 {
-	_printf(STDERR_FILENO, "%s: %d: %s: not found\n", argv, c, cmd);
+	_printf(STDERR_FILENO, "%s: %d: %s: command not found\n", argv, c, cmd);
 }
 
 /**

@@ -45,7 +45,7 @@ int ex_it(char **cmd, char *argv __attribute__((unused))
 		{
 			free(l);
 			free_list(*head, f);
-			exit (0);
+			exit(0);
 		}
 		e = _atoi(cmd[1]);
 		free(l);
