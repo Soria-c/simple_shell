@@ -28,7 +28,7 @@ int main(int argc __attribute__((unused)), char **argv)
 			lin[r - 1] = '\0';
 		fcm = cm = command_builder(lin);
 		for (; cm; cm = cm->next)
-			exec_all(cm, c, argv[0], &head, builtins, fcm);
+			exe(cm, c, argv[0], &head, builtins, fcm, lin);
 		free_list(NULL, fcm);
 	}
 	free_list(head, NULL);

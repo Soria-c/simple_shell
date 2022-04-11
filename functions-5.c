@@ -38,21 +38,22 @@ cmds *command_builder(char *s)
 }
 
 /**
- * exec_all - executes all commands from the cm linked list.
+ * exe - executes all commands from the cm linked list.
  * @cm: commands linked list, at each iteration the address will change.
  * @c: counts the number of times the prompt has been printed.
  * @argv: current name of the program.
  * @head: linked list of some strings created by malloc.
  * @f: Head of the commands linked list.
- * @builtins: struct countaining pointers to builtin functions
+ * @bins: struct countaining pointers to builtin functions
+ * @l: address of input line.
  */
-void exec_all(cmds *cm, int c, char *argv, f_s **head, b_i *builtins, cmds *f)
+void exe(cmds *cm, int c, char *argv, f_s **head, b_i *bins, cmds *f, char *l)
 {
 	struct stat st;
 	int s, id;
 	char *wcmd;
 
-	if (!*(cm->cmd[0]) || !builtin_check(cm->cmd, builtins, argv, head, f))
+	if (!*(cm->cmd[0]) || !bin_chck(cm->cmd, bins, argv, head, f, l))
 		return;
 	s = stat(cm->cmd[0], &st);
 	if (s)
@@ -66,7 +67,7 @@ void exec_all(cmds *cm, int c, char *argv, f_s **head, b_i *builtins, cmds *f)
 		return;
 	}
 	if (!id)
-		_execve(cm->cmd, argv, c, head, f);
+		_execve(cm->cmd, argv, c, head, f, l);
 	else if (id > 0)
 		wait(NULL);
 	else

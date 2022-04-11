@@ -20,10 +20,11 @@ int printenv(char **c __attribute__((unused)), char *a __attribute__((unused)))
  * @cmd: commands.
  * @argv: current name of the program.
  * @head: address of malloc string linked list to be freed is necessary.
- * @f: address of linked list cm to be freed it if necessary
+ * @f: address of linked list cm to be freed if necessary
+ * @l: address of input line, to be freed if necessary.
  * Return: 0 if it fails, otherwise exits the current shell
  */
-int ex_it(char **cmd, char *argv, f_s **head, cmds *f)
+int ex_it(char **cmd, char *argv, f_s **head, cmds *f, char *l)
 {
 	unsigned char e;
 
@@ -36,7 +37,7 @@ int ex_it(char **cmd, char *argv, f_s **head, cmds *f)
 	{
 		if (!cmd[1])
 		{
-			free(f->cmd[0]);
+			free(l);
 			free_list(*head, f);
 			write(STDOUT_FILENO, "exit\n", 5);
 			exit(0);
@@ -45,12 +46,12 @@ int ex_it(char **cmd, char *argv, f_s **head, cmds *f)
 		{
 			_printf(STDERR_FILENO, "exit\n%s: exit: %s:", argv, cmd[1]);
 			_printf(STDERR_FILENO, " numeric argument required\n");
-			free(f->cmd[0]);
+			free(l);
 			free_list(*head, f);
 			exit(2);
 		}
 		e = _atoi(cmd[1]);
-		free(f->cmd[0]);
+		free(l);
 		write(STDOUT_FILENO, "exit\n", 5);
 		free_list(*head, f);
 		exit(e);
