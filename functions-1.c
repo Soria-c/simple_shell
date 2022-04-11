@@ -57,7 +57,7 @@ char *_getenv(char *name)
 {
 	unsigned int i;
 
-	for (i = 0; environ[i] && name; i++)
+	for (i = 0; environ[i] && name && *name; i++)
 	{
 		if (!(strn_cmp(name, environ[i], str_len(name))))
 			return (environ[i]);
