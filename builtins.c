@@ -27,7 +27,7 @@ int printenv(char **c __attribute__((unused)), char *a __attribute__((unused)))
 int ex_it(char **cmd, char *argv __attribute__((unused))
 , f_s **head, cmds *f, char *l)
 {
-	unsigned char e;
+	int e;
 
 	if (array2d_len(cmd) >= 3 && !isnt_digit(cmd[1]))
 	{
