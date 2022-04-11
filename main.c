@@ -6,8 +6,8 @@
  */
 void money(char **lin, int *xs)
 {
-	int i, j, ln, m, z, h, x;
-	char n[256], cpy[256], *env, buff[1024], buff2[1024];
+	int i, ln, m, z, h, x;
+	char n[256], cpy[256], *env, buff[1024], buff2[1024], n2[256];
 
 	for (i = 0; (*lin)[i]; i++)
 	{
@@ -15,16 +15,22 @@ void money(char **lin, int *xs)
 		{
 			if ((*lin)[i + 1] ==  '?')
 			{
-				(*lin)[i] = (*xs) + '0';
-				for (j = i + 1; (*lin)[j]; j++)
-					(*lin)[j] = (*lin)[j + 1];
+				to_string(n2, *xs);
+				
+				ln = str_len(n2);
+				if (ln)
+				str_cat(n2, &(*lin)[i + 2]);
+				(*lin) = realloc(*lin, str_len(*lin) + ln + 4);
+				(*lin)[i] = '\0';
+				str_cat(*lin, n2);
 			}
 			else if ((*lin)[i + 1] ==  '$')
 			{
 				to_string(n, getpid());
+				
 				ln = str_len(n);
 				str_cat(n, &(*lin)[i + 2]);
-				(*lin) = realloc(*lin, str_len(*lin) + ln + 2);
+				(*lin) = realloc(*lin, str_len(*lin) + ln + 4);
 				(*lin)[i] = '\0';
 				str_cat(*lin, n);
 			}
@@ -59,10 +65,12 @@ void money(char **lin, int *xs)
 				for (m = 0; env[m] != '=' && env[m]; m++)
 					;
 				str_cpy(buff, &env[z + 1]);
-				(*lin) = realloc(*lin, str_len(*lin) + str_len(buff) + 2);
-				(*lin)[i] = '\0';
+				
+				
 				str_cpy(buff2, &(*lin)[i + z + 1]);
 				str_cat(buff, buff2);
+				(*lin) = realloc(*lin, str_len(*lin) + str_len(buff) + 3);
+				(*lin)[i] = '\0';
 				str_cat(*lin, buff);
 				/*printf("buff: %s\n", buff);
 				printf("buff2: %s\n", buff2);*/
