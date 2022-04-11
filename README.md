@@ -84,7 +84,7 @@ $
 * `write (man 2 write)`
 * `_exit (man 2 _exit)`
 * `isatty (man 3 isatty)`
-* `fflush (man 3 fflush)
+* `fflush (man 3 fflush)`
 
 ### Installation
 Clone  this repository in your local machine
