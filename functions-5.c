@@ -25,10 +25,10 @@ cmds *command_builder(char *s)
 		new0->next = NULL;
 	}
 	h = head0;
-	h->cmd[0] = str_tok(h->sline, " \t");
-	for (;; h->cmd[0] = str_tok(h->sline, " \t"))
+	h->cmd[0] = str_tok(h->sline, " >\n\t");
+	for (;; h->cmd[0] = str_tok(h->sline, " >\n\t"))
 	{
-		for (i = 1; (h->cmd[i] = str_tok(NULL, " \t")); i++)
+		for (i = 1; (h->cmd[i] = str_tok(NULL, " >\n\t")); i++)
 			;
 		h = h->next;
 		if (!h)
