@@ -18,21 +18,18 @@ int printenv(char **c __attribute__((unused)), char *a __attribute__((unused)))
 /**
  * ex_it - implementation of the exit shell built in.
  * @cmd: commands.
- * @argv: current name of the program.
+ * @arg: current name of the program.
  * @head: address of malloc string linked list to be freed is necessary.
  * @f: address of linked list cm to be freed if necessary
  * @l: address of input line, to be freed if necessary.
  * Return: 0 if it fails, otherwise exits the current shell
  */
-int ex_it(char **cmd, char *argv __attribute__((unused))
+int ex_it(char **cmd __attribute__((unused)), char *arg __attribute__((unused))
 , f_s **head, cmds *f, char *l)
 {
-	if (!cmd[1])
-	{
-		free(l);
-		free_list(*head, f);
-		exit(0);
-	}
+	free(l);
+	free_list(*head, f);
+	exit(0);
 	return (0);
 }
 
