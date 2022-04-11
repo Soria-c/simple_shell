@@ -98,7 +98,7 @@ int check_route(char *cmd)
 		if (!cmd[k])
 			return (1);
 	}
-	else
+	else if (strn_cmp(cmd, "/bin", 4))
 		return (1);
 	if (str_len(cmd) <= 5)
 		return (1);
