@@ -58,7 +58,7 @@ void exe(cmds *cm, int c, char *argv, f_s **head, b_i *bins, cmds *f, char *l)
 	s = stat(cm->cmd[0], &st);
 	if (s)
 		wcmd = _which(cm->cmd[0]);
-	if (!check_input(cm->cmd[0], wcmd, s, 0) && 
+	if (!check_input(cm->cmd[0], wcmd, s, 0) &&
 		!check_input(cm->cmd[0], wcmd, s, 1))
 		return;
 	if (!s || wcmd)
@@ -75,41 +75,45 @@ void exe(cmds *cm, int c, char *argv, f_s **head, b_i *bins, cmds *f, char *l)
 	{
 		if (wcmd)
 			free(wcmd);
-		printf("Command not found\n");
+		/*printf("Command not found\n");*/
 	}
 }
 
-int check_input(char *s, char *wcmd, int st, int mod)
+int check_input(char *s, char *wcmd, int st __attribute__((unused)), int mod)
 {
 
 	if (!mod)
 	{
 		if (!wcmd && (strn_cmp(s, "/bin", 4) || str_len(s) <= 5))
 		{
-			if (!st)
-				printf("is a directory\n");
-			else
-				printf("Command not found0\n");
+			/*
+			*if (!st)
+			*	printf("is a directory\n");
+			*else
+			*	printf("Command not found0\n");
+			*/
 			return (0);
 		}
 		else if (!wcmd && !(strn_cmp(s, "/bin", 4)) && !checksh(&s[5]))
 		{
-			printf("Not such file or directory\n");
+			/*printf("Not such file or directory\n");*/
 			return (0);
 		}
 		return (1);
 	}
 	if (!wcmd && (strn_cmp(s, "/usr/bin", 8) || str_len(s) <= 9))
 	{
-		if (!st)
-			printf("is a directory\n");
-		else
-			printf("Command not found0\n");
+		/*
+		*if (!st)
+		*	printf("is a directory\n");
+		*else
+		*	printf("Command not found0\n");
+		*/
 		return (0);
 	}
 	else if (!wcmd && !(strn_cmp(s, "/usr/bin", 8)) && !checksh(&s[8]))
 	{
-		printf("Not such file or directory\n");
+		/*printf("Not such file or directory\n");*/
 		return (0);
 	}
 	return (1);
