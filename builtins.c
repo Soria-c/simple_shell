@@ -29,9 +29,9 @@ int ex_it(char **cmd, char *argv __attribute__((unused))
 {
 	int e;
 
-	if (array2d_len(cmd) >= 3 && !isnt_digit(cmd[1]))
+	if (array2d_len(cmd) >= 2 && !isnt_digit(cmd[1]))
 	{
-		return (0);
+		exit (2);
 	}
 	else
 	{
@@ -39,7 +39,7 @@ int ex_it(char **cmd, char *argv __attribute__((unused))
 		{
 			free(l);
 			free_list(*head, f);
-			exit(2);
+			exit(0);
 		}
 		if ((isnt_digit(cmd[1]) && cmd[1][0] != '-') || isnt_digit(&cmd[1][1]))
 		{
