@@ -44,6 +44,9 @@ void money(char **lin, int *xs)
 			}
 			else
 			{
+				if ((*lin)[i - 1] == '\\')
+					continue;
+
 				str_cpy(cpy, &(*lin)[i + 1]);
 				for (z = 0; cpy[z] != ' ' && cpy[z]; z++)
 					;
