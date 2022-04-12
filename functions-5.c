@@ -64,11 +64,11 @@ void exe(cmds *cm, int c, char *a, f_s **h, b_i *bi, cmds *f, char *l, int *xs)
 	else
 	{
 		free(wcmd);
-		printf_error(cm->cmd[0], a, c);
+		printf_error(cm->cmd[0], a, c, xs);
 		return;
 	}
 	if (!id)
-		_execve(cm->cmd, a, c, h, f, l);
+		_execve(cm->cmd, a, c, h, f, l, xs);
 	else if (id > 0)
 	{
 		waitpid(id, &k, 0);

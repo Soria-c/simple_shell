@@ -37,7 +37,7 @@ int _fork(int s, char *wcmd)
 │* @f: address of linked list cm to be freed if necessary.
  * @l: address of input line, to be freed if necessary.
  */
-void _execve(char **cmd, char *argv, int c, f_s **head, cmds *f, char *l)
+void _execve(char **cmd, char *argv, int c, f_s **head, cmds *f, char *l, int *xs)
 {
 	int rexc;
 	char *wcmd;
@@ -49,7 +49,7 @@ void _execve(char **cmd, char *argv, int c, f_s **head, cmds *f, char *l)
 		rexc = execve(wcmd, cmd, environ);
 		if (rexc == -1)
 		{
-			printf_error(cmd[0], argv, c);
+			printf_error(cmd[0], argv, c, xs);
 			free(l);
 			free_list(*head, f);
 			free(wcmd);
@@ -63,9 +63,10 @@ void _execve(char **cmd, char *argv, int c, f_s **head, cmds *f, char *l)
  * @argv: name of the program
  * @c: number of times the prompt has been printed.
  */
-void printf_error(char *cmd, char *argv, int c)
+void printf_error(char *cmd, char *argv, int c, int *xs)
 {
-	_printf(STDERR_FILENO, "%s: %d: %s: command not found\n", argv, c, cmd);
+	_printf(STDERR_FILENO, "%s: %d: %s: not found\n", argv, c, cmd);
+	*xs = 127;
 }
 
 /**

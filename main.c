@@ -7,7 +7,7 @@
 void money(char **lin, int *xs)
 {
 	int i, ln, m, z, h, x;
-	char n[256], cpy[256], *env, buff[1024], buff2[1024], n2[256];
+	char n[256], cpy[256], *env, buff[1024], buff2[1024], n2[256], *save;
 
 	for (i = 0; (*lin)[i]; i++)
 	{
@@ -15,14 +15,12 @@ void money(char **lin, int *xs)
 		{
 			(*lin)[i] = '\0';
 			break;
-
 		}
 		if ((*lin)[i] == '$')
 		{
 			if ((*lin)[i + 1] ==  '?')
 			{
 				to_string(n2, *xs);
-				
 				ln = str_len(n2);
 				if (ln)
 				str_cat(n2, &(*lin)[i + 2]);
@@ -33,7 +31,6 @@ void money(char **lin, int *xs)
 			else if ((*lin)[i + 1] ==  '$')
 			{
 				to_string(n, getpid());
-				
 				ln = str_len(n);
 				str_cat(n, &(*lin)[i + 2]);
 				(*lin) = realloc(*lin, str_len(*lin) + ln + 4);
@@ -42,7 +39,6 @@ void money(char **lin, int *xs)
 			}
 			else
 			{
-
 				str_cpy(cpy, &(*lin)[i + 1]);
 				for (z = 0; cpy[z] != ' ' && cpy[z]; z++)
 					;
@@ -50,44 +46,30 @@ void money(char **lin, int *xs)
 				env = _getenv(cpy);
 				if (!env)
 				{
-						for (h = 0; (*lin)[h + i] != ' ' && (*lin)[h + i]; h++)
-							;
-						/*printf("c: %d\n", (*lin)[h + i]);*/
-						if (!(*lin)[h + i])
-						{
-							/*printf("lin: %s\n", *lin);*/
-							(*lin)[i - 1] = '\0';
-							continue;
-						}
-						for (x = i; (*lin)[x + h]; x++)
-							(*lin)[x] = (*lin)[h + x];
-						/*printf("c2: %d\n", (*lin)[h + x]);*/
-						(*lin)[x] = '\0';
-						/*printf("lin2: %s\n", *lin);*/
+					for (h = 0; (*lin)[h + i] != ' ' && (*lin)[h + i]; h++)
+						;
+					if (!(*lin)[h + i])
+					{
+						(*lin)[i - 1] = '\0';
 						continue;
-
+					}
+					for (x = i; (*lin)[x + h]; x++)
+						(*lin)[x] = (*lin)[h + x];
+					(*lin)[x] = '\0';
+					continue;
 				}
-
 				for (m = 0; env[m] != '=' && env[m]; m++)
 					;
 				str_cpy(buff, &env[z + 1]);
-				
-				
 				str_cpy(buff2, &(*lin)[i + z + 1]);
 				str_cat(buff, buff2);
-				(*lin) = realloc(*lin, str_len(*lin) + str_len(buff) + 3);
+				save = realloc(*lin, i + str_len(buff) + 1);
+				*lin = save;
 				(*lin)[i] = '\0';
 				str_cat(*lin, buff);
-				/*printf("buff: %s\n", buff);
-				printf("buff2: %s\n", buff2);*/
-			
-				/*printf("env: %s\n", lin);*/
-
-				
 			}
 		}
 	}
-	/*printf("cpy: %s\n", cpy);*/
 }
 /**
  * main - entry point, takes input from user.
