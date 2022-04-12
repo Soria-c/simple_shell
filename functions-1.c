@@ -55,11 +55,14 @@ int str_len(char *s)
  */
 char *_getenv(char *name)
 {
-	unsigned int i;
+	unsigned int i, j;
+	char save[1024];
 
 	for (i = 0; environ[i] && name && *name; i++)
 	{
-		if (!(strn_cmp(name, environ[i], str_len(name))))
+		for (j = 0; environ[i][j] != '='; j++)
+			save[i] = environ[i][j];
+		if (!(strn_cmp(name, save, str_len(save))))
 			return (environ[i]);
 	}
 	return (NULL);
