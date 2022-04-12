@@ -11,7 +11,7 @@ void money(char **lin, int *xs)
 
 	if ((*lin)[0] == '#')
 	{
-		(*lin)[i] = '\0';
+		(*lin)[0] = '\0';
 		return;
 	}
 	for (i = 0; (*lin)[i]; i++)
