@@ -61,7 +61,8 @@ char *_getenv(char *name)
 	for (i = 0; environ[i] && name && *name; i++)
 	{
 		for (j = 0; environ[i][j] != '='; j++)
-			save[i] = environ[i][j];
+			save[j] = environ[i][j];
+		save[j] = '\0';
 		if (!(strn_cmp(name, save, str_len(save))))
 			return (environ[i]);
 	}
