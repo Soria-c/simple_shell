@@ -9,6 +9,11 @@ void money(char **lin, int *xs)
 	int i, ln, m, z, h, x;
 	char n[256], cpy[256], *env, buff[1024], buff2[1024], n2[256], *save;
 
+	if ((*lin)[0] == '#')
+	{
+		(*lin)[i] = '\0';
+		return;
+	}
 	for (i = 0; (*lin)[i]; i++)
 	{
 		if ((*lin)[i] == '#' && (*lin)[i - 1] == ' ')
@@ -107,7 +112,7 @@ int main(int argc __attribute__((unused)), char **argv)
 	}
 	free_list(head, NULL);
 	free(lin);
-	return (0);
+	return (xs);
 }
 
 
