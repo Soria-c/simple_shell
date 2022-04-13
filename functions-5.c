@@ -63,7 +63,6 @@ void exe(cmds *cm, int c, char *a, f_s **h, b_i *bi, cmds *f, char *l, int *xs)
 	else
 	{
 		free(wcmd);
-		printf("as\n");
 		printf_error(cm->cmd[0], a, c, xs);
 		return;
 	}
