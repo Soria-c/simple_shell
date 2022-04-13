@@ -27,7 +27,6 @@ void money(char **lin, int *xs)
 			{
 				to_string(n2, *xs);
 				ln = str_len(n2);
-				if (ln)
 				str_cat(n2, &(*lin)[i + 2]);
 				(*lin) = realloc(*lin, str_len(*lin) + ln + 4);
 				(*lin)[i] = '\0';
@@ -44,9 +43,6 @@ void money(char **lin, int *xs)
 			}
 			else
 			{
-				if ((*lin)[i - 1] == '\\')
-					continue;
-
 				str_cpy(cpy, &(*lin)[i + 1]);
 				for (z = 0; cpy[z] != ' ' && cpy[z]; z++)
 					;
