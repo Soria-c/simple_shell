@@ -25,10 +25,10 @@ cmds *command_builder(char *s)
 		new0->next = NULL;
 	}
 	h = head0;
-	h->cmd[0] = str_tok(h->sline, " >\n\t");
-	for (;; h->cmd[0] = str_tok(h->sline, " >\n\t"))
+	h->cmd[0] = str_tok(h->sline, " >\t");
+	for (;; h->cmd[0] = str_tok(h->sline, " \t"))
 	{
-		for (i = 1; (h->cmd[i] = str_tok(NULL, " >\n\t")); i++)
+		for (i = 1; (h->cmd[i] = str_tok(NULL, " >\t")); i++)
 			;
 		h = h->next;
 		if (!h)
@@ -56,7 +56,7 @@ void exe(cmds *cm, int c, char *a, f_s **h, b_i *bi, cmds *f, char *l, int *xs)
 
 	if (!*(cm->cmd[0]) || !bin_chck(cm->cmd, bi, a, h, f, l, xs))
 		return;
-	s = stat(cm->cmd[0], &st);
+	s = lstat(cm->cmd[0], &st);
 	if (s)
 		wcmd = _which(cm->cmd[0]);
 	if ((!s) || (s && wcmd))

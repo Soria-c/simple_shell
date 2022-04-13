@@ -50,6 +50,8 @@ int ex_it(char **cmd, char *argv __attribute__((unused))
 			exit(2);
 		}
 		e = _atoi(cmd[1]);
+		if (e < 0)
+			return (1);
 		free(l);
 		free_list(*head, f);
 		exit(e);
