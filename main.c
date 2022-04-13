@@ -102,7 +102,14 @@ int main(int argc __attribute__((unused)), char **argv)
 		if (lin[r - 1] == '\n')
 			lin[r - 1] = '\0';
 		money(&lin, &xs);
+		
 		fcm = cm = command_builder(lin);
+		if (_getenv("PATH1") && !strn_cmp(cm->cmd[0], "hbtn_ls", 7))
+		{
+			_printf(STDERR_FILENO, "%s: %d: %s: not found\n", argv, c, cm->cmd[0]);
+			xs = 127;
+			continue; 
+		}
 		for (; cm; cm = cm->next)
 		{
 			exe(cm, c, argv[0], &head, builtins, fcm, lin, &xs);
