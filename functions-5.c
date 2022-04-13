@@ -57,13 +57,13 @@ void exe(cmds *cm, int c, char *a, f_s **h, b_i *bi, cmds *f, char *l, int *xs)
 	if (!*(cm->cmd[0]) || !bin_chck(cm->cmd, bi, a, h, f, l, xs))
 		return;
 	s = lstat(cm->cmd[0], &st);
-	if (s || (!s && (strn_cmp(cm->cmd[0], "/bin", 4) || strn_cmp(cm->cmd[0], "/usr/bin", 8))))
-		wcmd = _which(cm->cmd[0]);
-	if ((!s && (!strn_cmp(cm->cmd[0], "/bin", 4) || !strn_cmp(cm->cmd[0], "/usr/bin", 8))) || (s && wcmd))
+	wcmd = _which(cm->cmd[0]);
+	if ((!s && (!strn_cmp(cm->cmd[0], "/bin", 4) || !strn_cmp(cm->cmd[0], "/usr/bin", 8))) || wcmd)
 		id = _fork(s, wcmd);
 	else
 	{
 		free(wcmd);
+		printf("as\n");
 		printf_error(cm->cmd[0], a, c, xs);
 		return;
 	}
