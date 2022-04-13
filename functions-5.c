@@ -58,7 +58,7 @@ void exe(cmds *cm, int c, char *a, f_s **h, b_i *bi, cmds *f, char *l, int *xs)
 		return;
 	s = lstat(cm->cmd[0], &st);
 	wcmd = _which(cm->cmd[0]);
-	if ((!s && (!strn_cmp(cm->cmd[0], "/bin", 4) || !strn_cmp(cm->cmd[0], "/usr/bin", 8))) || wcmd)
+	if ((!s && (!strn_cmp(cm->cmd[0], "/bin", 4) || !strn_cmp(cm->cmd[0], "/usr/bin", 8) || !strn_cmp(cm->cmd[0], ".", 1))) || wcmd)
 		id = _fork(s, wcmd);
 	else
 	{
