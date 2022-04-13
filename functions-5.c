@@ -53,12 +53,12 @@ void exe(cmds *cm, int c, char *a, f_s **h, b_i *bi, cmds *f, char *l, int *xs)
 	struct stat st;
 	int s, id, k;
 	char *wcmd;
-
 	if (!*(cm->cmd[0]) || !bin_chck(cm->cmd, bi, a, h, f, l, xs))
 		return;
 	s = lstat(cm->cmd[0], &st);
-	wcmd = _which(cm->cmd[0]);
-	if ((!s && (!strn_cmp(cm->cmd[0], "/bin", 4) || !strn_cmp(cm->cmd[0], "/usr/bin", 8) || !strn_cmp(cm->cmd[0], ".", 1))) || wcmd)
+	if (s)
+		wcmd = _which(cm->cmd[0]);
+	if ((!s) || (s && wcmd))
 		id = _fork(s, wcmd);
 	else
 	{
